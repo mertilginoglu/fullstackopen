@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const config = require("../utils/config");
+const mongoose = require('mongoose');
+const config = require('../utils/config');
 
 const mongoUrl = config.MONGODB_URI;
 mongoose.connect(mongoUrl);
@@ -11,4 +11,4 @@ const blogSchema = new mongoose.Schema({
   likes: Number,
 });
 
-module.exports = mongoose.model("Blog", blogSchema);
+module.exports = mongoose.model('Blog', blogSchema);
