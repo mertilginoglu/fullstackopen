@@ -13,7 +13,7 @@ beforeEach(async () => {
       .map(blog => new Blog(blog))
     const promiseArray = blogObjects.map(blog => blog.save())
     await Promise.all(promiseArray)
-  })
+})
 
 test('notes are returned as json', async () => {
   await api
@@ -25,6 +25,11 @@ test('notes are returned as json', async () => {
 test('there are two blogs', async () => {
     const response = await api.get('/api/blogs')
     expect(response.body).toHaveLength(2)
+})
+
+test('response contains id', async () => {
+  const response = await api.get('/api/blogs')
+  expect(response.body[0]._id).toBeDefined()
 })
 
 
