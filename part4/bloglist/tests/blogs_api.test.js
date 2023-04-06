@@ -32,7 +32,7 @@ test('response contains id', async () => {
   expect(response.body[0]._id).toBeDefined()
 })
 
-test('response contains id', async () => {
+test('post request adds blog to the database', async () => {
   await api.post('/api/blogs').send({
     "title": "postman",
     "author": "mert",
@@ -41,6 +41,15 @@ test('response contains id', async () => {
   })
   const response = await api.get('/api/blogs')
   expect(response.body).toHaveLength(3)
+})
+
+test('if request body doesnt contain likes, then add it as 0', async () => {
+  response = await api.post('/api/blogs').send({
+    "title": "postman",
+    "author": "mert",
+    "url": "mert241.com",
+  })
+  expect(response.body.likes).toEqual(0)
 })
 
 
