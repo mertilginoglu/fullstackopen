@@ -52,7 +52,20 @@ test('if request body doesnt contain likes, then add it as 0', async () => {
   expect(response.body.likes).toEqual(0)
 })
 
+test('if request body doesnt contain title, then return 400 as response code', async () => {
+  response = await api.post('/api/blogs').send({
+    "author": "mert",
+    "url": "mert241.com",
+  }).expect(400)
+})
 
+test('if request body doesnt contain url, then return 400 as response code', async () => {
+  response = await api.post('/api/blogs').send({
+    "title": "postman",
+    "author": "mert",
+  }).expect(400)
+  
+})
 
 afterAll(async () => {
   await mongoose.connection.close()
