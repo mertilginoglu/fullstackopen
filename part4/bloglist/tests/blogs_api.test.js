@@ -32,6 +32,18 @@ test('response contains id', async () => {
   expect(response.body[0]._id).toBeDefined()
 })
 
+test('response contains id', async () => {
+  await api.post('/api/blogs').send({
+    "title": "postman",
+    "author": "mert",
+    "url": "mert241.com",
+    "likes": 4
+  })
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(3)
+})
+
+
 
 afterAll(async () => {
   await mongoose.connection.close()
