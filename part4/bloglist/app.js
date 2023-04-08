@@ -1,5 +1,7 @@
 const express = require('express');
 
+const middleware = require('./utils/middleware')
+
 const app = express();
 const cors = require('cors');
 require('express-async-errors')
@@ -15,4 +17,5 @@ app.use('/api/blogs/', blogsRouter);
 app.use('/api/users/', usersRouter);
 app.use('/api/login', loginRouter)
 
+app.use(middleware.errorHandler)
 module.exports = app
