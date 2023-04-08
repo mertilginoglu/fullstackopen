@@ -44,7 +44,7 @@ test('post request adds blog to the database', async () => {
 })
 
 test('if request body doesnt contain likes, then add it as 0', async () => {
-  response = await api.post('/api/blogs').send({
+  const response = await api.post('/api/blogs').send({
     "title": "postman",
     "author": "mert",
     "url": "mert241.com",
@@ -78,7 +78,7 @@ test('deleting the blog with correct id returns 204 and functions correctly', as
 test('updating the note with correct body returns 204 and correct blog', async () => {
   const resp = await api.get('/api/blogs')
   const id = resp.body[0]._id
-  const response = await api.put('/api/blogs/' + id).send({
+  await api.put('/api/blogs/' + id).send({
     "title": "UnitTestRocks",
     "author": "mertef",
     "url": "mert241.com",
