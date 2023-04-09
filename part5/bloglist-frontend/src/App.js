@@ -8,6 +8,9 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
@@ -56,6 +59,51 @@ const App = () => {
     setPassword('')
   }
 
+  const addBlog = (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: newTitle,
+      author: newAuthor,
+      url: newUrl
+    }
+
+    blogService
+      .create(blogObject)
+        .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setNewTitle('')
+        setNewAuthor('')
+        setNewUrl('')
+      })
+  }
+
+  const blogForm = () => (
+    <form onSubmit={addBlog}>
+      <div>      
+        Title:
+        <input
+          value={newTitle}
+          onChange={({ target }) => setNewTitle(target.value)}
+        />
+      </div>
+      <div>      
+        Author:
+        <input
+          value={newAuthor}
+          onChange={({ target }) => setNewAuthor(target.value)}
+        />
+      </div>
+      <div>      
+        Url:
+        <input
+          value={newUrl}
+          onChange={({ target }) => setNewUrl(target.value)}
+        />
+      </div>
+      <button type="submit">save</button>
+    </form>  
+  )
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -92,6 +140,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      { blogForm() }
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
