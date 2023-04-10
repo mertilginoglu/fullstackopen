@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -41,6 +44,7 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
+      console.log(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
@@ -87,80 +91,45 @@ const App = () => {
       })
   }
 
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <div>      
-        Title:
-        <input
-          value={newTitle}
-          onChange={({ target }) => setNewTitle(target.value)}
-        />
-      </div>
-      <div>      
-        Author:
-        <input
-          value={newAuthor}
-          onChange={({ target }) => setNewAuthor(target.value)}
-        />
-      </div>
-      <div>      
-        Url:
-        <input
-          value={newUrl}
-          onChange={({ target }) => setNewUrl(target.value)}
-        />
-      </div>
-      <button type="submit">save</button>
-    </form>  
-  )
-
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>      
-  )
-
-  if (user === null) {
-    return (
-      <div>
-        {errorMessage && 
-        <label> {errorMessage} </label>
-        }
-        <h2>Log in to application</h2>
-        { loginForm() }
-      </div>
-    )
-  }
-
+    
   return (
     <div>
       {errorMessage && 
       <label> {errorMessage} </label>
       }
       <h2>blogs</h2>
-      { blogForm() }
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
-      <button onClick={handleLogout}>Logout</button>
+      {!user && 
+        <Togglable buttonLabel="Log in">
+          <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleSubmit={handleLogin}
+          />
+        </Togglable>
+      }
+      
+      {user &&
+        <div>
+          {user.name} logged in <button onClick={handleLogout}>Logout</button>
+          {blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} />
+          )}
+          <Togglable buttonLabel="new note">
+            <BlogForm
+            title={newTitle}
+            author={newAuthor}
+            url={newUrl}
+            handleTitleChange={({ target }) => setNewTitle(target.value)}
+            handleAuthorChange={({ target }) => setNewAuthor(target.value)}
+            handleUrlChange={({target}) => setNewUrl(target.value)}
+            handleSubmit={addBlog}
+            />
+          </Togglable>
+        </div>
+      }
+
     </div>
   )
 }
