@@ -12,6 +12,7 @@ const App = () => {
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -43,6 +44,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
+      console.log("in here")
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
@@ -74,6 +76,14 @@ const App = () => {
         setNewTitle('')
         setNewAuthor('')
         setNewUrl('')
+        setSuccessMessage("Added a blog")
+        setTimeout(() => setSuccessMessage(null), 5000)
+      }).catch((err) => {
+        setNewTitle('')
+        setNewAuthor('')
+        setNewUrl('')
+        setErrorMessage(err.message)
+        setTimeout(() => setErrorMessage(null), 5000)
       })
   }
 
@@ -131,6 +141,9 @@ const App = () => {
   if (user === null) {
     return (
       <div>
+        {errorMessage && 
+        <label> {errorMessage} </label>
+        }
         <h2>Log in to application</h2>
         { loginForm() }
       </div>
@@ -139,6 +152,9 @@ const App = () => {
 
   return (
     <div>
+      {errorMessage && 
+      <label> {errorMessage} </label>
+      }
       <h2>blogs</h2>
       { blogForm() }
       {blogs.map(blog =>
