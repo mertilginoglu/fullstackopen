@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 
-const Blog = ({blog, like, deleteBlog, canRemove}) => {
+const Blog = ({ blog, like, deleteBlog, canRemove }) => {
   const [visible, setVisible] = useState(false)
 
   const style = {
