@@ -1,42 +1,31 @@
 import { useState } from "react"
 
-const Blog = ({blog, addLike}) => {
+const Blog = ({blog, like, deleteBlog, canRemove}) => {
   const [visible, setVisible] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
 
-  const toggleVisibility = () => {
-    setVisible(!visible)
-  }
-
-  const blogStyle = {
+  const style = {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
   }
-
-  return(
-  <div style={blogStyle}>
-    <div>
-      <p>{blog.title} {blog.author}</p>
-      <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>view</button>
-      </div>
+  return (
+    <div style={style} className='blog'>
+      {blog.title} {blog.author}
+      <button onClick={() => setVisible(!visible)}>
+        {visible ? 'hide' : 'show'}
+      </button>
+      {visible&&
+        <div>
+          <div> <a href={blog.url}> {blog.url}</a> </div>
+          <div>likes {blog.likes} <button onClick={like}>like</button></div>
+          <div>{blog.user && blog.user.name}</div>
+          {canRemove && <div><button onClick={deleteBlog}>delete</button></div>}
+        </div>
+      }
     </div>
-    <div style={showWhenVisible}>
-      <label>{likes} 
-        <button onClick={addLike}>
-          like
-        </button>
-      </label>
-      <p>{blog.url}</p>
-      <button onClick={toggleVisibility}>hide</button>
-    </div>
-  </div>
-  ) 
+  )
 }
 
 export default Blog

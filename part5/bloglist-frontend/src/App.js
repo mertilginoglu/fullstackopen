@@ -78,12 +78,18 @@ const App = () => {
   const like = async (blog) => {
     const blogToUpdate = { ...blog, likes: blog.likes + 1, user: blog.user.id }
     const updatedBlog = await blogService.update(blogToUpdate)
-    const newBlogs = blogs.map(b => b.id === blog.id ? updatedBlog : b)
-    setBlogs(newBlogs)
-    console.log(newBlogs)
-    console.log(blogs)
+    setBlogs(blogs.map(b => b.id === blog.id ? updatedBlog : b))
   }
-    
+
+  const deleteBlog = async (blog) => {
+    console.log(blog)
+    await blogService.deleteBlog(blog.id)
+    console.log("in here")
+    setBlogs(blogs.filter(b => b.id !== blog.id ))
+  }
+
+  const byLikes = (b1, b2) => b2.likes - b1.likes
+
   return (
     <div>
       {errorMessage && 
@@ -110,9 +116,15 @@ const App = () => {
               createBlog={addBlog}
             />
           </Togglable>
-          {blogs.sort((firstItem, secondItem) => secondItem.likes - firstItem.likes).map(blog =>
-            <Blog key={blog.id} blog={blog} addLike={() => like(blog)}/>
-          )}
+          {blogs.sort(byLikes).map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            like={() => like(blog)}
+            deleteBlog={() => deleteBlog(blog)}
+            canRemove = {user && blog.user.username===user.username}
+          />
+        )}
         </div>
       }
 
